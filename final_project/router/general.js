@@ -28,17 +28,21 @@ public_users.get('/',async (req, res) => {
 });
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
+public_users.get('/isbn/:isbn',async(req, res) =>{
   //Write your code here
   const ISBN = req.params.isbn
-  return res.status(200).json(books[ISBN]);
+  const result = new Promise((resolve,reject)=>{
+    resolve(books[ISBN])
+  })
+  const value = await result
+  return res.status(200).json(value);
  });
   
 // Get book details based on author
-public_users.get('/author/:author',function (req, res) {
+public_users.get('/author/:author',async(req, res) =>{
   //Write your code here
   const AUTHOR = req.params.author
-  console.log(AUTHOR)
+  
   for(let x in books){
     if(books[x].author === AUTHOR){
       const obj = {
@@ -47,14 +51,18 @@ public_users.get('/author/:author',function (req, res) {
         reviews : books[x].reviews
       }
       console.log(obj)
-      return res.status(200).send(JSON.stringify({bookByAuthor : obj},null,4));
+      const result = new Promise((resolve,reject)=>{
+        resolve(obj)
+      })
+      const value = await result
+      return res.status(200).send(JSON.stringify({bookByAuthor : value},null,4));
     }
   }
   
 });
 
 // Get all books based on title
-public_users.get('/title/:title',function (req, res) {
+public_users.get('/title/:title',async(req, res) =>{
   const Title = req.params.title;
   for(let x in books){
     if(books[x].title === Title){
@@ -63,7 +71,11 @@ public_users.get('/title/:title',function (req, res) {
         author : books[x].author,
         reviews : books[x].reviews
       }
-      return res.status(200).send(JSON.stringify({bookByTitle : obj},null,4))
+      const result = new Promise((resolve,reject)=>{
+        resolve(obj)
+      })
+      const value = await result
+      return res.status(200).send(JSON.stringify({bookByTitle : value},null,4))
     }
   }
   //Write your code here
